@@ -8,14 +8,17 @@ on:
         default: '4.3-stable'
 
 jobs:
-  build-android:
+  build:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        platform: [linux]
     steps:
     - uses: actions/checkout@v3
-    - name: Clone repo
-      uses: actions/checkout@v3
-      with:
-        repository: 'godotengine/godot'
-        path: 'git'
-        ref: ${{ github.event.inputs.tag }}
+    - name: Clone git repo using build.sh to correct version
+      run: |
+        ./build.sh -v ${{ inputs.tag }} -g ${{ inputs.tag }} -b classical
+
+    - name: Build
+      run: |
+        ./build.sh -v ${{ inputs.tag }} -g ${{ inputs.tag }} -b classical -c -p ${{ matrix.platform }}
