@@ -211,7 +211,7 @@ if [ ! -d "deps/keystore" ]; then
 fi
 
 if [ "${skip_git_checkout}" == 0 ]; then
-  git clone --depth 1 ${GODOT_REPO} git || /bin/true
+  git clone ${GODOT_REPO} git || /bin/true
   pushd git
   git checkout -b ${git_treeish} origin/${git_treeish} || git checkout ${git_treeish}
   git reset --hard
