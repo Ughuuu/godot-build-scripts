@@ -5,7 +5,7 @@ on:
     inputs:
       repo:
         description: 'Godot Repo'
-        default: 'https://github.com/ProjectChrono/chrono'
+        default: 'https://github.com/godotengine/godot'
       tag:
         description: 'Version Tag'
         default: '4.3-stable'
