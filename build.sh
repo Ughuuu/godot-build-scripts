@@ -34,7 +34,7 @@ force_download=0
 skip_download=1
 skip_git_checkout=0
 
-while getopts "h?r:u:p:v:g:b:fsc" opt; do
+while getopts "h?r:u:p:v:g:b:o:fsc" opt; do
   case "$opt" in
   h|\?)
     echo "Usage: $0 [OPTIONS...]"
@@ -48,7 +48,7 @@ while getopts "h?r:u:p:v:g:b:fsc" opt; do
     echo "  -f force redownload of all images"
     echo "  -s skip downloading"
     echo "  -c skip checkout"
-    echo "  -p platform"
+    echo "  -o platform"
     echo
     exit 1
     ;;
@@ -74,6 +74,9 @@ while getopts "h?r:u:p:v:g:b:fsc" opt; do
       build_classical=0
     fi
     ;;
+  o)
+    platform=$OPTARG
+    ;;
   f)
     force_download=1
     ;;
@@ -82,9 +85,6 @@ while getopts "h?r:u:p:v:g:b:fsc" opt; do
     ;;
   c)
     skip_git_checkout=1
-    ;;
-  p)
-    platform=$OPTARG
     ;;
   esac
 done
@@ -207,7 +207,7 @@ if [ ! -d "deps/keystore" ]; then
 fi
 
 if [ "${skip_git_checkout}" == 0 ]; then
-  git clone https://github.com/godotengine/godot git || /bin/true
+  git clone --depth 1 https://github.com/godotengine/godot git || /bin/true
   pushd git
   git checkout -b ${git_treeish} origin/${git_treeish} || git checkout ${git_treeish}
   git reset --hard
@@ -251,6 +251,7 @@ mkdir -p ${basedir}/out/windows
 ${podman_run} -v ${basedir}/build-windows:/root/build -v ${basedir}/out/windows:/root/out -v ${basedir}/deps/angle:/root/angle -v ${basedir}/deps/mesa:/root/mesa --env STEAM=${build_steam} localhost/godot-windows:${img_version} bash build/build.sh 2>&1 | tee ${basedir}/out/logs/windows
 fi
 
+echo "${platform}"
 if [ "${platform}" == "linux" ]; then
 mkdir -p ${basedir}/out/linux
 ${podman_run} -v ${basedir}/build-linux:/root/build -v ${basedir}/out/linux:/root/out localhost/godot-linux:${img_version} bash build/build.sh 2>&1 | tee ${basedir}/out/logs/linux
