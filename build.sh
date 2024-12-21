@@ -245,37 +245,44 @@ mkdir -p ${basedir}/mono-glue
 export podman_run="${podman} run -i --rm --env BUILD_NAME=${BUILD_NAME} --env GODOT_VERSION_STATUS=${GODOT_VERSION_STATUS} --env NUM_CORES=${NUM_CORES} --env CLASSICAL=${build_classical} --env MONO=${build_mono} -v ${basedir}/godot-${godot_version}.tar.gz:/root/godot.tar.gz -v ${basedir}/mono-glue:/root/mono-glue -w /root/"
 export img_version=$IMAGE_VERSION
 
-if [ "${platform}" == "macos" ]; then
+if [ "${platform}" == "mono" ]; then
+${podman} pull ${registry}/godot-linux:${img_version}
 mkdir -p ${basedir}/mono-glue
 ${podman_run} -v ${basedir}/build-mono-glue:/root/build ${registry}/godot-linux:${img_version} bash build/build.sh 2>&1 | tee ${basedir}/out/logs/mono-glue
 fi
 
 if [ "${platform}" == "windows" ]; then
+${podman} pull ${registry}/godot-windows:${img_version}
 mkdir -p ${basedir}/out/windows
 ${podman_run} -v ${basedir}/build-windows:/root/build -v ${basedir}/out/windows:/root/out -v ${basedir}/deps/angle:/root/angle -v ${basedir}/deps/mesa:/root/mesa --env STEAM=${build_steam} ${registry}/godot-windows:${img_version} bash build/build.sh 2>&1 | tee ${basedir}/out/logs/windows
 fi
 
 if [ "${platform}" == "linux" ]; then
+${podman} pull ${registry}/godot-linux:${img_version}
 mkdir -p ${basedir}/out/linux
 ${podman_run} -v ${basedir}/build-linux:/root/build -v ${basedir}/out/linux:/root/out ${registry}/godot-linux:${img_version} bash build/build.sh 2>&1 | tee ${basedir}/out/logs/linux
 fi
 
 if [ "${platform}" == "web" ]; then
+${podman} pull ${registry}/godot-web:${img_version}
 mkdir -p ${basedir}/out/web
 ${podman_run} -v ${basedir}/build-web:/root/build -v ${basedir}/out/web:/root/out ${registry}/godot-web:${img_version} bash build/build.sh 2>&1 | tee ${basedir}/out/logs/web
 fi
 
 if [ "${platform}" == "macos" ]; then
+${podman} pull ${registry}/godot-macos:${img_version}
 mkdir -p ${basedir}/out/macos
 ${podman_run} -v ${basedir}/build-macos:/root/build -v ${basedir}/out/macos:/root/out -v ${basedir}/deps/moltenvk:/root/moltenvk -v ${basedir}/deps/angle:/root/angle ${registry}/godot-osx:${img_version} bash build/build.sh 2>&1 | tee ${basedir}/out/logs/macos
 fi
 
 if [ "${platform}" == "android" ]; then
+${podman} pull ${registry}/godot-android:${img_version}
 mkdir -p ${basedir}/out/android
 ${podman_run} -v ${basedir}/build-android:/root/build -v ${basedir}/out/android:/root/out -v ${basedir}/deps/swappy:/root/swappy -v ${basedir}/deps/keystore:/root/keystore ${registry}/godot-android:${img_version} bash build/build.sh 2>&1 | tee ${basedir}/out/logs/android
 fi
 
 if [ "${platform}" == "ios" ]; then
+${podman} pull ${registry}/godot-ios:${img_version}
 mkdir -p ${basedir}/out/ios
 ${podman_run} -v ${basedir}/build-ios:/root/build -v ${basedir}/out/ios:/root/out ${registry}/godot-ios:${img_version} bash build/build.sh 2>&1 | tee ${basedir}/out/logs/ios
 fi
