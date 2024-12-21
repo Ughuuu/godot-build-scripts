@@ -19,6 +19,7 @@ tar xf /root/godot.tar.gz --strip-components=1
 if [ "${CLASSICAL}" == "1" ]; then
   echo "Starting classical build for Linux..."
 
+  if [ "${ARCH}" == "x86_64" ]; then
   export PATH="${GODOT_SDK_LINUX_X86_64}/bin:${BASE_PATH}"
 
   $SCONS platform=linuxbsd arch=x86_64 $OPTIONS target=editor
@@ -31,7 +32,9 @@ if [ "${CLASSICAL}" == "1" ]; then
   mkdir -p /root/out/x86_64/templates
   cp -rvp bin/* /root/out/x86_64/templates
   rm -rf bin
+  fi
 
+  if [ "${ARCH}" == "x86_32" ]; then
   export PATH="${GODOT_SDK_LINUX_X86_32}/bin:${BASE_PATH}"
 
   $SCONS platform=linuxbsd arch=x86_32 $OPTIONS target=editor
@@ -44,7 +47,9 @@ if [ "${CLASSICAL}" == "1" ]; then
   mkdir -p /root/out/x86_32/templates
   cp -rvp bin/* /root/out/x86_32/templates
   rm -rf bin
+  fi
 
+  if [ "${ARCH}" == "arm64" ]; then
   export PATH="${GODOT_SDK_LINUX_ARM64}/bin:${BASE_PATH}"
 
   $SCONS platform=linuxbsd arch=arm64 $OPTIONS target=editor
@@ -57,7 +62,9 @@ if [ "${CLASSICAL}" == "1" ]; then
   mkdir -p /root/out/arm64/templates
   cp -rvp bin/* /root/out/arm64/templates
   rm -rf bin
+  fi
 
+  if [ "${ARCH}" == "arm32" ]; then
   export PATH="${GODOT_SDK_LINUX_ARM32}/bin:${BASE_PATH}"
 
   $SCONS platform=linuxbsd arch=arm32 $OPTIONS target=editor
@@ -70,6 +77,7 @@ if [ "${CLASSICAL}" == "1" ]; then
   mkdir -p /root/out/arm32/templates
   cp -rvp bin/* /root/out/arm32/templates
   rm -rf bin
+  fi
 fi
 
 # Mono
@@ -80,6 +88,7 @@ if [ "${MONO}" == "1" ]; then
   cp -r /root/mono-glue/GodotSharp/GodotSharp/Generated modules/mono/glue/GodotSharp/GodotSharp/
   cp -r /root/mono-glue/GodotSharp/GodotSharpEditor/Generated modules/mono/glue/GodotSharp/GodotSharpEditor/
 
+  if [ "${ARCH}" == "x86_64" ]; then
   export PATH="${GODOT_SDK_LINUX_X86_64}/bin:${BASE_PATH}"
 
   $SCONS platform=linuxbsd arch=x86_64 $OPTIONS $OPTIONS_MONO target=editor
@@ -93,7 +102,9 @@ if [ "${MONO}" == "1" ]; then
   mkdir -p /root/out/x86_64/templates-mono
   cp -rvp bin/* /root/out/x86_64/templates-mono
   rm -rf bin
+  fi
 
+  if [ "${ARCH}" == "x86_32" ]; then
   export PATH="${GODOT_SDK_LINUX_X86_32}/bin:${BASE_PATH}"
 
   $SCONS platform=linuxbsd arch=x86_32 $OPTIONS $OPTIONS_MONO target=editor
@@ -107,7 +118,9 @@ if [ "${MONO}" == "1" ]; then
   mkdir -p /root/out/x86_32/templates-mono
   cp -rvp bin/* /root/out/x86_32/templates-mono
   rm -rf bin
+  fi
 
+  if [ "${ARCH}" == "arm64" ]; then
   export PATH="${GODOT_SDK_LINUX_ARM64}/bin:${BASE_PATH}"
 
   $SCONS platform=linuxbsd arch=arm64 $OPTIONS $OPTIONS_MONO target=editor
@@ -121,7 +134,9 @@ if [ "${MONO}" == "1" ]; then
   mkdir -p /root/out/arm64/templates-mono
   cp -rvp bin/* /root/out/arm64/templates-mono
   rm -rf bin
+  fi
 
+  if [ "${ARCH}" == "arm32" ]; then
   export PATH="${GODOT_SDK_LINUX_ARM32}/bin:${BASE_PATH}"
 
   $SCONS platform=linuxbsd arch=arm32 $OPTIONS $OPTIONS_MONO target=editor
@@ -135,6 +150,7 @@ if [ "${MONO}" == "1" ]; then
   mkdir -p /root/out/arm32/templates-mono
   cp -rvp bin/* /root/out/arm32/templates-mono
   rm -rf bin
+  fi
 fi
 
 echo "Linux build successful"

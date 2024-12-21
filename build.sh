@@ -27,6 +27,7 @@ fi
 
 platform=""
 registry="${REGISTRY}"
+arch=""
 username=""
 password=""
 godot_version=""
@@ -38,7 +39,7 @@ force_download=0
 skip_download=1
 skip_git_checkout=0
 
-while getopts "h?r:u:p:v:g:b:o:fsc" opt; do
+while getopts "h?r:u:p:v:g:b:o:a:fsc" opt; do
   case "$opt" in
   h|\?)
     echo "Usage: $0 [OPTIONS...]"
@@ -53,6 +54,7 @@ while getopts "h?r:u:p:v:g:b:o:fsc" opt; do
     echo "  -s skip downloading"
     echo "  -c skip checkout"
     echo "  -o platform"
+    echo "  -a arch"
     echo
     exit 1
     ;;
@@ -80,6 +82,9 @@ while getopts "h?r:u:p:v:g:b:o:fsc" opt; do
     ;;
   o)
     platform=$OPTARG
+    ;;
+  a)
+    arch=$OPTARG
     ;;
   f)
     force_download=1
@@ -242,7 +247,7 @@ mkdir -p ${basedir}/out
 mkdir -p ${basedir}/out/logs
 mkdir -p ${basedir}/mono-glue
 
-export podman_run="${podman} run -i --rm --env BUILD_NAME=${BUILD_NAME} --env GODOT_VERSION_STATUS=${GODOT_VERSION_STATUS} --env NUM_CORES=${NUM_CORES} --env CLASSICAL=${build_classical} --env MONO=${build_mono} -v ${basedir}/godot-${godot_version}.tar.gz:/root/godot.tar.gz -v ${basedir}/mono-glue:/root/mono-glue -w /root/"
+export podman_run="${podman} run -i --rm --env ARCH=${arch} --env BUILD_NAME=${BUILD_NAME} --env GODOT_VERSION_STATUS=${GODOT_VERSION_STATUS} --env NUM_CORES=${NUM_CORES} --env CLASSICAL=${build_classical} --env MONO=${build_mono} -v ${basedir}/godot-${godot_version}.tar.gz:/root/godot.tar.gz -v ${basedir}/mono-glue:/root/mono-glue -w /root/"
 export img_version=$IMAGE_VERSION
 
 if [ "${platform}" == "mono" ]; then

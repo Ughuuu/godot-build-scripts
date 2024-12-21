@@ -16,6 +16,7 @@ jobs:
     strategy:
       matrix:
         platform: [linux]
+        arch: [x86_64]
     steps:
     - uses: actions/checkout@v3
     - name: Clone git repo using build.sh to correct version
@@ -24,4 +25,4 @@ jobs:
 
     - name: Build
       run: |
-        ./build.sh -v ${{ inputs.tag }} -g ${{ inputs.tag }} -b classical -c -o ${{ matrix.platform }}
+        ./build.sh -v ${{ inputs.tag }} -g ${{ inputs.tag }} -b classical -c -o ${{ matrix.platform }} -a ${{ matrix.arch }}
