@@ -29,7 +29,7 @@ export WEB_EDITOR_HOSTNAME=''
 export REGISTRY='ghcr.io/ughuuu/build-containers'
 
 # Version string of the images to use in build.sh.
-export IMAGE_VERSION='4.3-f40'
+export IMAGE_VERSION='4.3'
 
 # Default build name used to distinguish between official and custom builds.
 export BUILD_NAME='custom_build'
