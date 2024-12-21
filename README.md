@@ -33,7 +33,7 @@ main focus. Tweak the build scripts to match your own requirements if
 you want to use this until we provide a better, user-friendly
 interface.
 
-## Generate deps folder
+## Generate deps
 
 
 To re-generate the deps folder. Delete it and run the command:
@@ -41,3 +41,11 @@ To re-generate the deps folder. Delete it and run the command:
 ```sh
 ./build.sh -v 4.3-stable -g 4.3-stable -b classical -c
 ```
+
+To clone the godot repo, run:
+
+```sh
+./build.sh -v 4.3-stable -g 4.3-stable -b classical
+```
+
+If you already cloned it, pass -c to skip cloning it, or delete the `git` folder.
