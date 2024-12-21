@@ -32,3 +32,12 @@ Again, this is intended for release managers and usability is not the
 main focus. Tweak the build scripts to match your own requirements if
 you want to use this until we provide a better, user-friendly
 interface.
+
+## Generate deps folder
+
+
+To re-generate the deps folder. Delete it and run the command:
+
+```sh
+./build.sh -v 4.3-stable -g 4.3-stable -b classical -c
+```

@@ -21,6 +21,7 @@ if [ -z "${NUM_CORES}" ]; then
   export NUM_CORES=16
 fi
 
+platform=""
 registry="${REGISTRY}"
 username=""
 password=""
@@ -47,6 +48,7 @@ while getopts "h?r:u:p:v:g:b:fsc" opt; do
     echo "  -f force redownload of all images"
     echo "  -s skip downloading"
     echo "  -c skip checkout"
+    echo "  -p platform"
     echo
     exit 1
     ;;
@@ -81,6 +83,9 @@ while getopts "h?r:u:p:v:g:b:fsc" opt; do
   c)
     skip_git_checkout=1
     ;;
+  p)
+    platform=$OPTARG
+    ;;
   esac
 done
 
@@ -93,12 +98,12 @@ fi
 
 IFS=- read version status <<< "$godot_version"
 echo "Building Godot ${version} ${status} from commit or branch ${git_treeish}."
-read -p "Is this correct (y/n)? " choice
-case "$choice" in
-  y|Y ) echo "yes";;
-  n|N ) echo "No, aborting."; exit 0;;
-  * ) echo "Invalid choice, aborting."; exit 1;;
-esac
+#read -p "Is this correct (y/n)? " choice
+#case "$choice" in
+#  y|Y ) echo "yes";;
+#  n|N ) echo "No, aborting."; exit 0;;
+#  * ) echo "Invalid choice, aborting."; exit 1;;
+#esac
 export GODOT_VERSION_STATUS="${status}"
 
 if [ "${status}" == "stable" ]; then
@@ -236,26 +241,40 @@ mkdir -p ${basedir}/mono-glue
 export podman_run="${podman} run -it --rm --env BUILD_NAME=${BUILD_NAME} --env GODOT_VERSION_STATUS=${GODOT_VERSION_STATUS} --env NUM_CORES=${NUM_CORES} --env CLASSICAL=${build_classical} --env MONO=${build_mono} -v ${basedir}/godot-${godot_version}.tar.gz:/root/godot.tar.gz -v ${basedir}/mono-glue:/root/mono-glue -w /root/"
 export img_version=$IMAGE_VERSION
 
+if [ "${platform}" == "macos" ]; then
 mkdir -p ${basedir}/mono-glue
 ${podman_run} -v ${basedir}/build-mono-glue:/root/build localhost/godot-linux:${img_version} bash build/build.sh 2>&1 | tee ${basedir}/out/logs/mono-glue
+fi
 
+if [ "${platform}" == "windows" ]; then
 mkdir -p ${basedir}/out/windows
 ${podman_run} -v ${basedir}/build-windows:/root/build -v ${basedir}/out/windows:/root/out -v ${basedir}/deps/angle:/root/angle -v ${basedir}/deps/mesa:/root/mesa --env STEAM=${build_steam} localhost/godot-windows:${img_version} bash build/build.sh 2>&1 | tee ${basedir}/out/logs/windows
+fi
 
+if [ "${platform}" == "linux" ]; then
 mkdir -p ${basedir}/out/linux
 ${podman_run} -v ${basedir}/build-linux:/root/build -v ${basedir}/out/linux:/root/out localhost/godot-linux:${img_version} bash build/build.sh 2>&1 | tee ${basedir}/out/logs/linux
+fi
 
+if [ "${platform}" == "web" ]; then
 mkdir -p ${basedir}/out/web
 ${podman_run} -v ${basedir}/build-web:/root/build -v ${basedir}/out/web:/root/out localhost/godot-web:${img_version} bash build/build.sh 2>&1 | tee ${basedir}/out/logs/web
+fi
 
+if [ "${platform}" == "macos" ]; then
 mkdir -p ${basedir}/out/macos
 ${podman_run} -v ${basedir}/build-macos:/root/build -v ${basedir}/out/macos:/root/out -v ${basedir}/deps/moltenvk:/root/moltenvk -v ${basedir}/deps/angle:/root/angle localhost/godot-osx:${img_version} bash build/build.sh 2>&1 | tee ${basedir}/out/logs/macos
+fi
 
+if [ "${platform}" == "android" ]; then
 mkdir -p ${basedir}/out/android
 ${podman_run} -v ${basedir}/build-android:/root/build -v ${basedir}/out/android:/root/out -v ${basedir}/deps/swappy:/root/swappy -v ${basedir}/deps/keystore:/root/keystore localhost/godot-android:${img_version} bash build/build.sh 2>&1 | tee ${basedir}/out/logs/android
+fi
 
+if [ "${platform}" == "ios" ]; then
 mkdir -p ${basedir}/out/ios
 ${podman_run} -v ${basedir}/build-ios:/root/build -v ${basedir}/out/ios:/root/out localhost/godot-ios:${img_version} bash build/build.sh 2>&1 | tee ${basedir}/out/logs/ios
+fi
 
 uid=$(id -un)
 gid=$(id -gn)
@@ -263,4 +282,4 @@ if [ ! -z "$SUDO_UID" ]; then
   uid="${SUDO_UID}"
   gid="${SUDO_GID}"
 fi
-chown -R -f $uid:$gid ${basedir}/git ${basedir}/out ${basedir}/mono-glue ${basedir}/godot*.tar.gz
+#chown -R -f $uid:$gid ${basedir}/git ${basedir}/out ${basedir}/mono-glue ${basedir}/godot*.tar.gz
