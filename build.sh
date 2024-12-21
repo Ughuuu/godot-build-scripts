@@ -21,6 +21,10 @@ if [ -z "${NUM_CORES}" ]; then
   export NUM_CORES=16
 fi
 
+if [ -z "${GODOT_REPO}" ]; then
+  export GODOT_REPO="https://github.com/godotengine/godot.git"
+fi
+
 platform=""
 registry="${REGISTRY}"
 username=""
@@ -207,7 +211,7 @@ if [ ! -d "deps/keystore" ]; then
 fi
 
 if [ "${skip_git_checkout}" == 0 ]; then
-  git clone --depth 1 https://github.com/godotengine/godot git || /bin/true
+  git clone --depth 1 ${GODOT_REPO} git || /bin/true
   pushd git
   git checkout -b ${git_treeish} origin/${git_treeish} || git checkout ${git_treeish}
   git reset --hard

@@ -3,6 +3,9 @@ name: Build Engine
 on:
   workflow_dispatch:
     inputs:
+      repo:
+        description: 'Godot Repo'
+        default: 'https://github.com/ProjectChrono/chrono'
       tag:
         description: 'Version Tag'
         default: '4.3-stable'

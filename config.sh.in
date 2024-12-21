@@ -37,6 +37,9 @@ export BUILD_NAME='custom_build'
 # Default number of parallel cores for each build.
 export NUM_CORES=16
 
+# The godot repo to clone
+export GODOT_REPO='https://github.com/godotengine/godot'
+
 # Set up your own signing keystore and relevant details below.
 # If you do not fill all SIGN_* fields, signing will be skipped.
 
