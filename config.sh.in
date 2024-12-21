@@ -26,7 +26,7 @@ export WEB_EDITOR_HOSTNAME=''
 # contributors.
 # You can build your own registry with scripts at
 # https://github.com/godotengine/build-containers
-export REGISTRY='ghcr.io/ughuuu/godot-build-containers'
+export REGISTRY='ghcr.io/ughuuu/build-containers'
 
 # Version string of the images to use in build.sh.
 export IMAGE_VERSION='4.3-f40'
