@@ -24,4 +24,4 @@ jobs:
 
     - name: Build
       run: |
-        ./build.sh -v ${{ inputs.tag }} -g ${{ inputs.tag }} -b classical -c -p ${{ matrix.platform }}
+        ./build.sh -v ${{ inputs.tag }} -g ${{ inputs.tag }} -b classical -c -o ${{ matrix.platform }}
