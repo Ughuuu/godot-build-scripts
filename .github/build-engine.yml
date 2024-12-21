@@ -1,0 +1,21 @@
+name: Build Engine
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Version Tag'
+        default: '4.3-stable'
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Clone repo
+      uses: actions/checkout@v3
+      with:
+        repository: 'godotengine/godot'
+        path: 'git'
+        ref: ${{ github.event.inputs.tag }}
